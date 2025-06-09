@@ -1,0 +1,18 @@
+# Website Analyzer API Configuration
+WEBSITE_ANALYZER_API_URL=https://your-api-endpoint.amazonaws.com
+WEBSITE_ANALYZER_API_KEY=your-api-key-here
+
+# Authentication Configuration
+AUTH_SECRET_KEY=your-secret-key-for-hashing-passwords
+
+# Valid Users (format: username:hashed_password,username2:hashed_password2)
+# Default demo user: username=demo, password=demo123
+VALID_USERS=demo:8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918
+
+# Additional Configuration (Optional)
+# Add any other environment variables your app might need
+
+# Instructions:
+# 1. Copy this file to .env in the same directory
+# 2. Replace the placeholder values with your actual configuration
+# 3. For production, use Streamlit Cloud secrets instead 
