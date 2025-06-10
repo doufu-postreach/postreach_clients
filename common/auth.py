@@ -198,25 +198,6 @@ class StreamlitAuth:
                     st.rerun()
                 else:
                     st.error("Invalid username or password.")
-        
-        # Demo credentials info
-        st.markdown("---")
-        st.info("**Demo Credentials:** username: `demo`, password: `demo123`")
-        st.markdown("""
-        <div style='background-color: #f0f2f6; padding: 1rem; border-radius: 0.5rem; margin-top: 1rem;'>
-        <h4>🚀 For Production Deployment:</h4>
-        <p>Set your authentication credentials in Streamlit Cloud secrets:</p>
-        <pre>
-[secrets]
-AUTH_SECRET_KEY = "your-secret-key-here"
-
-[secrets.VALID_USERS]
-username1 = "hashed_password1"
-username2 = "hashed_password2"
-        </pre>
-        <p><strong>Note:</strong> Passwords should be pre-hashed using HMAC-SHA256.</p>
-        </div>
-        """, unsafe_allow_html=True)
     
     def show_user_info(self):
         """Show current user info in sidebar."""

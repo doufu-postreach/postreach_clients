@@ -309,7 +309,7 @@ class WebsiteAnalyzerAPIClient:
         """
         try:
             # Try to make a simple request to check availability
-            response = self.session.get(f"{self.base_url}/health", timeout=10)
+            response = self.session.get(f"{self.base_url}/api/v1/ping", timeout=10)
             return response.status_code == 200
         except:
             # If health endpoint doesn't exist, try the list endpoint with minimal params
