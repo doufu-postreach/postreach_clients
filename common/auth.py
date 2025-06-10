@@ -94,7 +94,17 @@ class StreamlitAuth:
         try:
             users = st.secrets.get("VALID_USERS", {})
             if users:
-                return users
+                # If it's already a dict, return it
+                if isinstance(users, dict):
+                    return users
+                # If it's a string, parse it like environment variable
+                elif isinstance(users, str):
+                    parsed_users = {}
+                    for user_entry in users.split(","):
+                        if ":" in user_entry:
+                            username, hashed_password = user_entry.split(":", 1)
+                            parsed_users[username.strip()] = hashed_password.strip()
+                    return parsed_users
         except (KeyError, FileNotFoundError):
             pass
         
