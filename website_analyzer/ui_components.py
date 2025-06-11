@@ -201,24 +201,58 @@ def display_logo_section(logo_url: Optional[str], color_palette: Optional[List[D
         if color_palette and len(color_palette) > 0:
             st.markdown("**Brand Color Palette:**")
             
-            # Create color swatches
-            color_html = "<div style='display: flex; gap: 1rem; flex-wrap: wrap; margin-top: 0.5rem;'>"
+            # Check if color_palette contains HTML strings instead of proper data
+            if isinstance(color_palette, str):
+                st.warning("⚠️ Color palette data appears to be in HTML format. Displaying raw data:")
+                with st.expander("Raw Color Data", expanded=False):
+                    st.code(color_palette, language="html")
+                return
             
-            for i, color in enumerate(color_palette):
-                hex_code = color.get('hex_code', '#000000')
-                rgb = color.get('rgb', [0, 0, 0])
+            # Validate that color_palette is a list of dictionaries with proper structure
+            try:
+                valid_colors = []
+                for color in color_palette:
+                    if isinstance(color, dict) and 'hex_code' in color:
+                        valid_colors.append(color)
+                    elif isinstance(color, str):
+                        # Skip HTML strings that might be mixed in
+                        continue
                 
-                color_html += f"""
-                <div style='text-align: center;'>
-                    <div style='width: 80px; height: 80px; background-color: {hex_code}; 
-                         border: 2px solid #ddd; border-radius: 8px; margin-bottom: 0.5rem;'></div>
-                    <div style='font-size: 0.8em; font-weight: bold;'>{hex_code}</div>
-                    <div style='font-size: 0.7em; color: #666;'>RGB({rgb[0]}, {rgb[1]}, {rgb[2]})</div>
-                </div>
-                """
-            
-            color_html += "</div>"
-            st.markdown(color_html, unsafe_allow_html=True)
+                if not valid_colors:
+                    st.warning("⚠️ No valid color data found in the color palette.")
+                    return
+                
+                # Create color swatches using Streamlit columns for better layout
+                num_colors = len(valid_colors)
+                cols = st.columns(min(num_colors, 6))  # Max 6 colors per row
+                
+                for i, color in enumerate(valid_colors):
+                    hex_code = color.get('hex_code', '#000000')
+                    rgb = color.get('rgb', [0, 0, 0])
+                    
+                    # Ensure RGB is properly formatted
+                    if isinstance(rgb, (list, tuple)) and len(rgb) >= 3:
+                        rgb_values = f"RGB({rgb[0]}, {rgb[1]}, {rgb[2]})"
+                    else:
+                        rgb_values = "RGB(?, ?, ?)"
+                    
+                    with cols[i % len(cols)]:
+                        # Create individual color swatch with proper HTML
+                        color_swatch_html = f"""
+                        <div style='text-align: center; margin-bottom: 1rem;'>
+                            <div style='width: 80px; height: 80px; background-color: {hex_code}; border: 2px solid #ddd; border-radius: 8px; margin: 0 auto 0.5rem auto;'></div>
+                            <div style='font-size: 0.8em; font-weight: bold;'>{hex_code}</div>
+                            <div style='font-size: 0.7em; color: #666;'>{rgb_values}</div>
+                        </div>
+                        """
+                        st.markdown(color_swatch_html, unsafe_allow_html=True)
+                
+            except Exception as e:
+                st.error(f"Failed to render color palette: {str(e)}")
+                st.warning("⚠️ There was an issue with the color palette data format.")
+                with st.expander("Debug Information", expanded=False):
+                    st.write("Color palette data type:", type(color_palette))
+                    st.write("Color palette content:", color_palette)
 
 
 def display_brand_voice(brand_voice: Optional[Dict[str, Any]]):
