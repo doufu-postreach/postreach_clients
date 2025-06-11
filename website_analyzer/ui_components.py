@@ -184,6 +184,7 @@ def display_logo_section(logo_url: Optional[str], color_palette: Optional[List[D
     if not logo_url and not color_palette:
         return
     
+    st.divider()
     st.subheader("🎨 Visual Brand Assets")
     
     col1, col2 = st.columns([1, 2])
@@ -265,6 +266,7 @@ def display_brand_voice(brand_voice: Optional[Dict[str, Any]]):
     if not brand_voice:
         return
     
+    st.divider()
     st.subheader("🗣️ Brand Voice Analysis")
     
     # Create tabs for different aspects
